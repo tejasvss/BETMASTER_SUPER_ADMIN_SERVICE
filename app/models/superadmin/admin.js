@@ -64,6 +64,12 @@ const adminSchema = new mongoose.Schema({
     },
     usersCount:{
         type:Number
+    },
+    profileImageUrl:{
+        type:String
+    },
+    isLoggedIn:{
+        type:Boolean
     }
 },{timestamps:true,versionKey:false});
 

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const Customer = new Schema({}, { strict: false });
-exports.UserCollection = mongoose.model('customers', Customer);
+exports.Customer= mongoose.model('customers', Customer);
 
 const customerDeposits=new Schema({},{strict:false});
 exports.CustomerDeposits=mongoose.model('customer_deposits',customerDeposits);
@@ -12,4 +12,7 @@ exports.CustomerWithdrawls=mongoose.model('customer_withdrawls',customerWithdraw
 
 const customerReports=new Schema({},{strict:false});
 exports.CustomerReports=mongoose.model('customer_reports',customerReports);
+
+const CustomerErrorLogs=new Schema({},{strict:false});
+exports.CustomerErrorLogs=mongoose.model("customer_error_logs",CustomerErrorLogs);
 
