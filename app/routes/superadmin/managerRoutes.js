@@ -7,4 +7,4 @@ const adminAuthorization=require('../../config/adminAuthorization');
 router.post('/createManager',adminAuthorization.verifyToken,adminAuthorization.isSuperAdmin,managerController.createManager);
 router.get('/getLatestManagers',adminAuthorization.verifyToken,adminAuthorization.isSuperAdmin,managerController.getLatestManagers)
 
-module.exports=router;
+module.exports=router
