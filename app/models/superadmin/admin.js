@@ -25,6 +25,9 @@ const adminSchema = new mongoose.Schema({
         type:Boolean,
         default:false
     },
+    accessAreas:[{
+        type:String
+    }],
     password: {
         type: String
     },
@@ -47,11 +50,9 @@ const adminSchema = new mongoose.Schema({
     },
     userManagement: {
         type: Boolean,
-        default: false
     },
     fundManagement: {
         type: Boolean,
-        default: false
     },
     token: {
         type: String
@@ -63,7 +64,8 @@ const adminSchema = new mongoose.Schema({
         type:Number
     },
     usersCount:{
-        type:Number
+        type:Number,
+        default:0
     },
     profileImageUrl:{
         type:String

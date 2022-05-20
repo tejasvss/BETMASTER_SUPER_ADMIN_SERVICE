@@ -11,7 +11,11 @@ router.post('/unblockCustomer',adminAuthorization.verifyToken,adminAuthorization
 router.get('/getAllBlockedCustomers',adminAuthorization.verifyToken,adminAuthorization.isSuperAdmin,customerController.getAllBlockedCustomers);
 router.post('/changeCustomerState',adminAuthorization.verifyToken,adminAuthorization.isSuperAdmin,customerController.changeCustomerState)
 router.post('/deleteCustomer',adminAuthorization.verifyToken,adminAuthorization.isSuperAdmin,customerController.deleteCustomer);
-router.get('/getCustomerErrorLogs',adminAuthorization.verifyToken,adminAuthorization.isSuperAdmin,customerController.getCustomerErrorLogs)
+router.get('/getCustomerErrorLogs',adminAuthorization.verifyToken,adminAuthorization.isSuperAdmin,customerController.getCustomerErrorLogs);
+router.post('/getCustomer',adminAuthorization.verifyToken,adminAuthorization.isSuperAdmin,customerController.getCustomer);
+router.post('/editCustomerNote',adminAuthorization.verifyToken,adminAuthorization.isSuperAdmin,customerController.editCustomerNote);
+router.post('/transferMoneyToUsers',adminAuthorization.verifyToken,adminAuthorization.isSuperAdmin,customerController.transferMoneyToUsers);
+router.post('/deductMoneyFromUsers',adminAuthorization.verifyToken,adminAuthorization.isSuperAdmin,customerController.deductMoneyFromUsers)
 
 
 module.exports=router;

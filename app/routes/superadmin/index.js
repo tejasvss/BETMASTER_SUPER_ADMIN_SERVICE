@@ -1,3 +1,4 @@
+const { Router } = require('express');
 const express=require('express');
 const router=new express.Router();
 const baseURL="/superAdminService"
@@ -7,6 +8,7 @@ router.use(baseURL,require('./adminRoutes'));
 router.use(baseURL,require('./reportsRoutes'));
 router.use(baseURL,require('./customerRoutes'));
 router.use(baseURL,require('./dashboardRoutes'));
+router.use(baseURL,require('./managerRoutes'));
 
   
 module.exports = router;

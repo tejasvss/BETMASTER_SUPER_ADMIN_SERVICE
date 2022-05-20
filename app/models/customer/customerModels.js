@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const Customer = new Schema({}, { strict: false });
+const Customer = new Schema({}, { timestamps:true,strict: false });
 exports.Customer= mongoose.model('customers', Customer);
 
 const customerDeposits=new Schema({},{strict:false});

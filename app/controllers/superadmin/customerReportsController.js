@@ -65,11 +65,13 @@ exports.getAllCustomerReports=async(req,res)=>{
                     reportStatus:1,
                     isEditable:1,
                     isReplied: 1,
-                    managerName:1
+                    managerName:1,
+                    createdAt:1,
+                    updatedAt:1
                 }
             }
         ])
-        res.status(200).send({status:200,Message:"Reports fetched successfully",Data:reportsData})
+        res.status(200).send({status:200,Message:"Reports fetched successfully",reportsCount:reportsData.length,Data:reportsData})
 
     }
     catch(error)
@@ -193,7 +195,7 @@ exports.getCustomerReportByReportId=async(req,res)=>{
                 $addFields:
                 {
                     managerName:"$managerData.name",
-                    username:"$managerData.username"
+                    username:"$userData.username"
                 }
             },
             {
@@ -208,7 +210,9 @@ exports.getCustomerReportByReportId=async(req,res)=>{
                     isEditable:1,
                     isReplied: 1,
                     managerName:1,
-                    repliedAdminName:1
+                    repliedAdminName:1,
+                    createdAt:1,
+                    updatedAt:1
                 }
             }
         ])
