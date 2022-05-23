@@ -4,6 +4,7 @@ const bcrypt=require('bcryptjs');
 const jwt=require('jsonwebtoken');
 const appsConfig=require('../../constants/appConstants.json');
 const customerModels=require('../../models/customer/customerModels');
+const Customer=require('../../models/customer/customer')
 const ActivityRecord=require('../../models/superadmin/activityRecord');
 
 

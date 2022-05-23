@@ -15,7 +15,7 @@ router.get('/getCustomerErrorLogs',adminAuthorization.verifyToken,adminAuthoriza
 router.post('/getCustomer',adminAuthorization.verifyToken,adminAuthorization.isSuperAdmin,customerController.getCustomer);
 router.post('/editCustomerNote',adminAuthorization.verifyToken,adminAuthorization.isSuperAdmin,customerController.editCustomerNote);
 router.post('/transferMoneyToUsers',adminAuthorization.verifyToken,adminAuthorization.isSuperAdmin,customerController.transferMoneyToUsers);
-router.post('/deductMoneyFromUsers',adminAuthorization.verifyToken,adminAuthorization.isSuperAdmin,customerController.deductMoneyFromUsers)
-
+router.post('/deductMoneyFromUsers',adminAuthorization.verifyToken,adminAuthorization.isSuperAdmin,customerController.deductMoneyFromUsers);
+router.post('/getCustomerActivity',adminAuthorization.verifyToken,adminAuthorization.isSuperAdmin,customerController.getCustomerActivity);
 
 module.exports=router;

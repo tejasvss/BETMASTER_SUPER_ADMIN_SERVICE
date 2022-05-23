@@ -1,4 +1,7 @@
-const {Customer,CustomerDeposits,CustomerWithdrawls}=require('../../models/customer/customerModels');
+// const {CustomerDeposits,CustomerWithdrawls}=require('../../models/customer/customerModels');
+const CustomerDeposits=require('../../models/customer/customerDeposits');
+const CustomerWithdrawls=require('../../models/customer/customerWithdrawls');
+const Customer=require('../../models/customer/customer')
 const Admin=require('../../models/superadmin/admin');
 const ActivityRecord=require('../../models/superadmin/activityRecord');
 

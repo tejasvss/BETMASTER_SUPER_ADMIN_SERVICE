@@ -2,7 +2,9 @@ const appsConfig=require('../../constants/appConstants.json');
 const customerModels=require('../../models/customer/customerModels');
 const ActivityRecord=require('../../models/superadmin/activityRecord');
 const FundsHistory=require('../../models/superadmin/fundsHistory');
-
+const CustomerDeposits=require('../../models/customer/customerDeposits');
+const CustomerWithdrawls=require('../../models/customer/customerWithdrawls');
+const Customer=require('../../models/customer/customer')
 
 
 /*-------------------------Getting_all_Customers_Module--------------------*/
@@ -10,7 +12,7 @@ exports.getAllCustomers=async(req,res)=>{
 
     try{
 
-        const customersData=await customerModels.Customer.aggregate([
+        const customersData=await Customer.aggregate([
 
             {
                 $match:{
@@ -98,7 +100,7 @@ exports.blockCustomer=async(req,res)=>{
 
         console.log("Length",(req.body.customerId).length)
        
-        const data=await customerModels.Customer.updateMany({customerId:{$in:req.body.customerId}},{$set:{isAccountBlocked:true}});
+        const data=await Customer.updateMany({customerId:{$in:req.body.customerId}},{$set:{isAccountBlocked:true}});
         
         //Storing_Activity
         await ActivityRecord.create({adminId:req.adminId,activity:`Blocked ${(req.body.customerId).length} customers`});
@@ -122,7 +124,7 @@ exports.unBlockCustomer=async(req,res)=>{
             return res.status(400).send({status:400,Message:"Required customerId fields cannot be empty"})
         }
        
-        const unblockedCustomersData=await customerModels.Customer.updateMany({customerId:{$in:req.body.customerId}},{$set:{isAccountBlocked:false}});
+        const unblockedCustomersData=await Customer.updateMany({customerId:{$in:req.body.customerId}},{$set:{isAccountBlocked:false}});
 
         //Storing_Activity
         await ActivityRecord.create({adminId:req.adminId,activity:`Unblocked ${(req.body.customerId).length} customers`});
@@ -141,7 +143,7 @@ exports.getAllBlockedCustomers=async(req,res)=>{
 
     try{
 
-        const customersData=await customerModels.Customer.aggregate([
+        const customersData=await Customer.aggregate([
 
             {
                 $match:{
@@ -226,7 +228,7 @@ exports.changeCustomerState=async(req,res)=>{
             return res.status(400).send({status:400,Message:"Required customerId or userState fields cannot be empty"})
         }
     
-        const customerData=await customerModels.Customer.findOneAndUpdate({customerId:req.body.customerId},{$set:{userState:req.body.userState}},{new:true});
+        const customerData=await Customer.findOneAndUpdate({customerId:req.body.customerId},{$set:{userState:req.body.userState}},{new:true});
 
                 //Storing_Activity
                 await ActivityRecord.create({adminId:req.adminId,activity:`Changes customerstate to ${req.body.userState}`});
@@ -250,7 +252,7 @@ exports.deleteCustomer=async(req,res)=>{
             return res.status(400).send({status:400,Message:"Required customerId fields cannot be empty"})
         }
 
-        const deletedCustomerData=await customerModels.Customer.deleteMany({customerId:{$in:req.body.customerId}});
+        const deletedCustomerData=await Customer.deleteMany({customerId:{$in:req.body.customerId}});
 
         return res.status(200).send({status:200,Message:"Customers deleted successfully"})
     }
@@ -285,7 +287,7 @@ exports.getCustomer=async(req,res)=>{
             return res.status(400).send({status:400,Message:"Required customerId fields cannot be empty"})
         }
 
-        const checkCustomerId=await customerModels.Customer.findOne({customerId:req.body.customerId});
+        const checkCustomerId=await Customer.findOne({customerId:req.body.customerId});
 
         if(!checkCustomerId)
         {
@@ -293,7 +295,7 @@ exports.getCustomer=async(req,res)=>{
     
         }
 
-        const customerData=await customerModels.Customer.aggregate([
+        const customerData=await Customer.aggregate([
 
             {
                 $match:{
@@ -353,6 +355,7 @@ exports.getCustomer=async(req,res)=>{
                 }
             }
         ]);
+
         res.status(200).send({status:200,Message:"User fetched successfully",Data:customerData})
         
     }
@@ -373,14 +376,14 @@ exports.editCustomerNote=async(req,res)=>{
             return res.status(400).send({status:400,Message:"Required customerId or note fields cannot be empty"})
         }
 
-        const checkUser=await customerModels.Customer.findOne({customerId:req.body.customerId});
+        const checkUser=await Customer.findOne({customerId:req.body.customerId});
 
         if(!checkUser)
         {
             return res.status(400).send({status:400,Message:"Your entered customerId is invalid"})
         }
 
-        const noteData=await customerModels.Customer.findOneAndUpdate({customerId:req.body.customerId},{$set:{note:req.body.note}},{new:true});
+        const noteData=await Customer.findOneAndUpdate({customerId:req.body.customerId},{$set:{note:req.body.note}},{new:true});
         return res.status(400).send({status:200,Message:"Note submitted successfully",noteData:noteData.note})
 
 
@@ -401,7 +404,7 @@ exports.transferMoneyToUsers=async(req,res)=>{
             return res.status(400).send({status:400,Message:"Required customerId or amount fields cannot be empty"})
         }
 
-        const checkUser=await customerModels.Customer.findOne({customerId:req.body.customerId});
+        const checkUser=await Customer.findOne({customerId:req.body.customerId});
 
         if(!checkUser)
         {
@@ -409,7 +412,7 @@ exports.transferMoneyToUsers=async(req,res)=>{
         }
          
         await FundsHistory.create({adminId:req.id,customerId:checkUser._id,amount:req.body.amount,fundType:2});
-        const customerData=await customerModels.Customer.findOneAndUpdate({customerId:req.body.customerId},{$inc:{walletBalance:req.body.amount}},{new:true});
+        const customerData=await Customer.findOneAndUpdate({customerId:req.body.customerId},{$inc:{walletBalance:req.body.amount}},{new:true});
 
         return res.status(200).send({status:200,Message:"Funds transferred successfully",Data:customerData})
 
@@ -431,7 +434,7 @@ exports.deductMoneyFromUsers=async(req,res)=>{
             return res.status(400).send({status:400,Message:"Required customerId or amount fields cannot be empty"})
         }
 
-        const checkUser=await customerModels.Customer.findOne({customerId:req.body.customerId});
+        const checkUser=await Customer.findOne({customerId:req.body.customerId});
 
         if(!checkUser)
         {
@@ -446,7 +449,7 @@ exports.deductMoneyFromUsers=async(req,res)=>{
         {
 
         await FundsHistory.create({adminId:req.id,customerId:checkUser._id,amount:req.body.amount,fundType:1});
-        const customerData=await customerModels.Customer.findOneAndUpdate({customerId:req.body.customerId},{$inc:{walletBalance:-(req.body.amount)}},{new:true});
+        const customerData=await Customer.findOneAndUpdate({customerId:req.body.customerId},{$inc:{walletBalance:-(req.body.amount)}},{new:true});
 
         return res.status(200).send({status:200,Message:"Funds deducted successfully",Data:customerData})
 
@@ -458,3 +461,47 @@ exports.deductMoneyFromUsers=async(req,res)=>{
         res.status(500).send({status:500,Message:error.message || "Something went wrong.Try again"})
     }
 }
+
+
+//Deposit statements of customers
+exports.getCustomerActivity=async(req,res)=>{
+
+    try{
+
+        if(!req.body.id || !req.body.activityType)
+        {
+            return res.status(400).send({status:400,Message:"Required customerId or activityType fields cannot be empty"})
+        }
+        
+       
+        const type=(req.body.activityType).toLowerCase();
+
+        const checkCustomer=await Customer.findOne({_id:req.body.id});
+        if(!checkCustomer)
+        {
+            return res.status(400).send({status:400,Message:"Your entered customerId is invalid"})
+        }
+
+        let DBQuery;
+        if(type=="customerdeposits")
+        {
+          DBQuery=await CustomerDeposits.find({customerId:req.body.id}).populate("depositApprovedOrRejectedBy", "_id name adminId");
+        }
+
+        else if(type == "customerwithdrawls")
+        {
+            DBQuery=await CustomerWithdrawls.find({customerId:req.body.id}).populate("withdrawlApprovedOrRejectedBy","_id name adminId");
+        }
+        console.log("ModelName",DBQuery)
+
+        const data= DBQuery;
+
+        return res.status(200).send({status:200,Message:" Data fetched successfully",totalCount:data.length,Data:data})
+
+    }
+    catch(error)
+    {
+        res.status(500).send({status:500,Message:error.message || "Something went wrong.Try again"})
+    }
+}
+
