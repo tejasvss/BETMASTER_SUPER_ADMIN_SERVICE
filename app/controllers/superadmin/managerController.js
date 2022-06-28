@@ -1,11 +1,12 @@
 const Admin=require('../../models/superadmin/admin');
 const bcrypt=require('bcryptjs');
 const generateId=require('../../utils/helpers/generateId');
-
+const Referral=require('../../models/superadmin/referralCode');
+const Customer=require('../../models/customer/customer');
 
 //Create Manager
 
-exports.createManager=async(req,res)=>{
+exports.createManager    =async(req,res)=>{
 
     try{
         
@@ -50,6 +51,71 @@ exports.getLatestManagers=async(req,res)=>{
 
         const managersData=await Admin.find({$or:[{role:"marketingmanager"},{role:"operationmanager"}]}).sort('-createdAt');
         res.status(200).send({status:200,Message:"Managers Data fetched successfully",Data:managersData})
+
+    }
+    catch(error)
+    {
+        res.status(500).send({status:500,Message:error.message || "Something went wrong.Try again"})
+    }
+}
+
+//get All Operation managers
+
+exports.getAllOperationManagers=async(req,res)=>{
+
+    try{
+ 
+
+        const managersData=await Admin.find({role:"operationmanager"});
+        res.status(200).send({status:200,Message:"Managers Data fetched successfully",totalCount:managersData.length,Data:managersData})
+
+    }
+    catch(error)
+    {
+        res.status(500).send({status:500,Message:error.message || "Something went wrong.Try again"})
+    }
+}
+
+//get All Operation managers
+
+exports.getAllMarketingManagers=async(req,res)=>{
+
+    try{
+ 
+
+        const managersData=await Admin.find({role:"marketingmanager"});
+        
+        for(const manager of managersData)
+        {
+            console.log("manager",manager);
+
+
+            const refData=await Referral.find({adminId:manager.adminId});
+             
+            console.log("referral",refData);
+
+            var holdAmount=[];
+
+            for(const referral of refData)
+            {
+                
+                const userData=await Customer.find({referralCode:referral.referralCode});
+                    
+                for(const user of userData)
+                {
+                    holdAmount.push(user.walletBalance)
+                }
+              
+            } 
+
+            console.log("Amount",holdAmount)
+
+            const holdingAmount=holdAmount.reduce((a,b)=>a+b,0);
+            manager.usersHoldingAmount=holdingAmount;
+            manager.settlementAmount=holdingAmount;
+        }
+        
+        res.status(200).send({status:200,Message:"Managers Data fetched successfully",totalCount:managersData.length,Data:managersData})
 
     }
     catch(error)

@@ -26,7 +26,9 @@ const adminSchema = new mongoose.Schema({
         default:false
     },
     accessAreas:[{
-        type:String
+        type:String,
+        lowercase:true,
+        trim:true
     }],
     password: {
         type: String
@@ -48,6 +50,7 @@ const adminSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    
     userManagement: {
         type: Boolean,
     },
@@ -72,6 +75,12 @@ const adminSchema = new mongoose.Schema({
     },
     isLoggedIn:{
         type:Boolean
+    },
+    usersHoldingAmount:{
+        type:Number
+    },
+    settlementAmount:{
+        type:Number
     }
 },{timestamps:true,versionKey:false});
 
